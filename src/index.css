@@ -1,32 +1,49 @@
 @import 'tailwindcss';
 
-/* 色は 2 つだけ：ふつうの棒（灰）と、強調（オレンジ）。dataviz の validate_palette.js で確認済み */
+/* ドパデザイン：黒地に虹。強調する棒・数字だけを虹色にし、ほかは灰色で沈める */
 @theme {
-  --color-bar: #a3a3a3;
-  --color-accent: #eb6834;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bar: #525252;
-    --color-accent: #d95926;
-  }
-}
-
-body {
-  @apply bg-white dark:bg-neutral-950;
+  --color-bar: #404040;
+  --color-eva: #ff8a1c;
+  --color-eva-alert: #ff2b2b;
 }
 
 :root {
   font-family: system-ui, -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-  color-scheme: light dark;
+  color-scheme: dark;
+  --rainbow: linear-gradient(90deg, #ff3b3b, #ff9f1a, #ffe11a, #3bff6a, #1ad1ff, #5b6bff, #c03bff, #ff3b3b);
 }
 
-/* 棒が下から伸びるアニメーション */
+body {
+  background: #0a0a0a;
+}
+
+/* 流れる虹の文字 */
+.rainbow-text {
+  background: var(--rainbow);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow-shift 4s linear infinite;
+}
+
+/* 流れる虹の帯 */
+.rainbow-strip {
+  background: var(--rainbow);
+  background-size: 200% 100%;
+  animation: rainbow-shift 3s linear infinite;
+}
+
+@keyframes rainbow-shift {
+  to {
+    background-position: 200% 0;
+  }
+}
+
+/* 棒が下から伸びて、少し跳ねる */
 .bar-grow {
-  transform-box: fill-box;
   transform-origin: bottom;
-  animation: bar-grow 600ms ease-out both;
+  animation: bar-grow 750ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 @keyframes bar-grow {
@@ -35,8 +52,76 @@ body {
   }
 }
 
+/* いまの 1 時間の棒がふわっと光る */
+.bar-pulse {
+  animation:
+    bar-grow 750ms cubic-bezier(0.34, 1.56, 0.64, 1) both,
+    pulse-glow 1.6s ease-in-out 800ms infinite;
+}
+
+@keyframes pulse-glow {
+  50% {
+    filter: brightness(1.5);
+  }
+}
+
+/* カウントアップが終わったら弾ける */
+.pop {
+  animation: pop 450ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes pop {
+  40% {
+    transform: scale(1.12);
+  }
+}
+
+/* 「どぱぁ～～～」が飛び出す */
+.dopa-in {
+  animation: dopa-in 600ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes dopa-in {
+  from {
+    transform: rotate(-4deg) scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: rotate(-4deg) scale(1);
+    opacity: 1;
+  }
+}
+
+/* 活動限界タイマー */
+.hazard {
+  background: repeating-linear-gradient(-45deg, #f5c400 0 12px, #111 12px 24px);
+}
+
+.eva-glow {
+  filter: drop-shadow(0 0 6px currentColor);
+}
+
+.eva-blink {
+  animation: eva-blink 0.8s steps(1) infinite;
+}
+
+@keyframes eva-blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .bar-grow {
+  .rainbow-text,
+  .rainbow-strip,
+  .bar-grow,
+  .bar-pulse,
+  .pop,
+  .dopa-in,
+  .eva-blink {
     animation: none;
+  }
+  .dopa-in {
+    transform: rotate(-4deg);
   }
 }
