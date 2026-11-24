@@ -1,0 +1,42 @@
+@import 'tailwindcss';
+
+/* 色は 2 つだけ：ふつうの棒（灰）と、強調（オレンジ）。dataviz の validate_palette.js で確認済み */
+@theme {
+  --color-bar: #a3a3a3;
+  --color-accent: #eb6834;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bar: #525252;
+    --color-accent: #d95926;
+  }
+}
+
+body {
+  @apply bg-white dark:bg-neutral-950;
+}
+
+:root {
+  font-family: system-ui, -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  color-scheme: light dark;
+}
+
+/* 棒が下から伸びるアニメーション */
+.bar-grow {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: bar-grow 600ms ease-out both;
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar-grow {
+    animation: none;
+  }
+}
